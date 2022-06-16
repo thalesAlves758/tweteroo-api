@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 
+const MINUS_TEN = -10;
+
 const app = express();
 
 app.use(cors());
@@ -35,6 +37,18 @@ app.post('/tweets', (req, res) => {
   tweets.push({ username, tweet });
 
   res.send('OK');
+});
+
+app.get('/tweets', (req, res) => {
+  const lastTenTweets = tweets.slice(MINUS_TEN);
+
+  const tweetsWithUserAvatars = lastTenTweets.map((tweet) => {
+    const currentUser = users.find((user) => user.username === tweet.username);
+
+    return { ...tweet, avatar: currentUser.avatar };
+  });
+
+  res.send(tweetsWithUserAvatars);
 });
 
 export default app;
