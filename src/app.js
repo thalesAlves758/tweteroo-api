@@ -4,6 +4,7 @@ import cors from 'cors';
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 const users = [
   {
@@ -19,5 +20,13 @@ const tweets = [
     tweet: 'eu amo o hub',
   },
 ];
+
+app.post('/sign-up', (req, res) => {
+  const { username, avatar } = req.body;
+
+  users.push({ username, avatar });
+
+  res.send('OK');
+});
 
 export default app;
