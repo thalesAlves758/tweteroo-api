@@ -25,6 +25,12 @@ const tweets = [
   },
 ];
 
+function getTweetWithUserAvatar(tweet) {
+  const currentUser = users.find((user) => user.username === tweet.username);
+
+  return { ...tweet, avatar: currentUser.avatar };
+}
+
 app.post('/sign-up', (req, res) => {
   const { username, avatar } = req.body;
 
@@ -60,13 +66,19 @@ app.post('/tweets', (req, res) => {
 app.get('/tweets', (req, res) => {
   const lastTenTweets = tweets.slice(MINUS_TEN);
 
-  const tweetsWithUserAvatars = lastTenTweets.map((tweet) => {
-    const currentUser = users.find((user) => user.username === tweet.username);
-
-    return { ...tweet, avatar: currentUser.avatar };
-  });
+  const tweetsWithUserAvatars = lastTenTweets.map(getTweetWithUserAvatar);
 
   res.send(tweetsWithUserAvatars);
+});
+
+app.get('/tweets/:username', (req, res) => {
+  const { username } = req.params;
+
+  const userTweets = tweets
+    .filter((tweet) => tweet.username === username)
+    .map(getTweetWithUserAvatar);
+
+  res.send(userTweets);
 });
 
 export default app;
