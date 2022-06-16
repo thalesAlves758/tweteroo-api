@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 const MINUS_TEN = -10;
+const ONE = 1;
 const CREATED_STATUS_CODE = 201;
 const BAD_REQUEST_STATUS_CODE = 400;
 
@@ -64,9 +65,18 @@ app.post('/tweets', (req, res) => {
 });
 
 app.get('/tweets', (req, res) => {
-  const lastTenTweets = tweets.slice(MINUS_TEN);
+  const page = parseInt(req.query.page);
 
-  const tweetsWithUserAvatars = lastTenTweets.map(getTweetWithUserAvatar);
+  if (page && page <= ONE) {
+    res.status(BAD_REQUEST_STATUS_CODE).send('Informe uma página válida!');
+    return;
+  }
+
+  const tweetsToSend = !page
+    ? tweets.slice(MINUS_TEN)
+    : tweets.slice(MINUS_TEN * page, MINUS_TEN * (page - ONE));
+
+  const tweetsWithUserAvatars = tweetsToSend.map(getTweetWithUserAvatar);
 
   res.send(tweetsWithUserAvatars);
 });
