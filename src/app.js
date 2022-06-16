@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 const MINUS_TEN = -10;
+const CREATED_STATUS_CODE = 201;
 const BAD_REQUEST_STATUS_CODE = 400;
 
 const app = express();
@@ -37,7 +38,7 @@ app.post('/sign-up', (req, res) => {
 
   users.push({ username, avatar });
 
-  res.send('OK');
+  res.status(CREATED_STATUS_CODE).send('OK');
 });
 
 app.post('/tweets', (req, res) => {
@@ -53,7 +54,7 @@ app.post('/tweets', (req, res) => {
 
   tweets.push({ username, tweet });
 
-  res.send('OK');
+  res.status(CREATED_STATUS_CODE).send('OK');
 });
 
 app.get('/tweets', (req, res) => {
