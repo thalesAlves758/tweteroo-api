@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 
 const MINUS_TEN = -10;
+const BAD_REQUEST_STATUS_CODE = 400;
 
 const app = express();
 
@@ -26,6 +27,14 @@ const tweets = [
 app.post('/sign-up', (req, res) => {
   const { username, avatar } = req.body;
 
+  if (!username || !avatar) {
+    res
+      .status(BAD_REQUEST_STATUS_CODE)
+      .send('Todos os campos são obrigatórios!');
+
+    return;
+  }
+
   users.push({ username, avatar });
 
   res.send('OK');
@@ -33,6 +42,14 @@ app.post('/sign-up', (req, res) => {
 
 app.post('/tweets', (req, res) => {
   const { username, tweet } = req.body;
+
+  if (!username || !tweet) {
+    res
+      .status(BAD_REQUEST_STATUS_CODE)
+      .send('Todos os campos são obrigatórios!');
+
+    return;
+  }
 
   tweets.push({ username, tweet });
 
