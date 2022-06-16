@@ -49,7 +49,8 @@ app.post('/sign-up', (req, res) => {
 });
 
 app.post('/tweets', (req, res) => {
-  const { username, tweet } = req.body;
+  const username = req.get('user');
+  const { tweet } = req.body;
 
   if (!username || !tweet) {
     res
@@ -67,14 +68,15 @@ app.post('/tweets', (req, res) => {
 app.get('/tweets', (req, res) => {
   const page = parseInt(req.query.page);
 
-  if (page && page <= ONE) {
+  if (!page || page < ONE) {
     res.status(BAD_REQUEST_STATUS_CODE).send('Informe uma página válida!');
     return;
   }
 
-  const tweetsToSend = !page
-    ? tweets.slice(MINUS_TEN)
-    : tweets.slice(MINUS_TEN * page, MINUS_TEN * (page - ONE));
+  const tweetsToSend =
+    page === ONE
+      ? tweets.slice(MINUS_TEN)
+      : tweets.slice(MINUS_TEN * page, MINUS_TEN * (page - ONE));
 
   const tweetsWithUserAvatars = tweetsToSend.map(getTweetWithUserAvatar);
 
