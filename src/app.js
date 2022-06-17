@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 
+import isValidUrl from './utils/isValidUrl.js';
+
 const MINUS_TEN = -10;
 const ONE = 1;
 const CREATED_STATUS_CODE = 201;
@@ -27,6 +29,14 @@ app.post('/sign-up', (req, res) => {
     res
       .status(BAD_REQUEST_STATUS_CODE)
       .send('Todos os campos são obrigatórios!');
+
+    return;
+  }
+
+  if (!isValidUrl(avatar)) {
+    res
+      .status(BAD_REQUEST_STATUS_CODE)
+      .send('O avatar precisa ser uma url válida!');
 
     return;
   }
