@@ -77,7 +77,9 @@ app.get('/tweets', (req, res) => {
       ? tweets.slice(MINUS_TEN)
       : tweets.slice(MINUS_TEN * page, MINUS_TEN * (page - ONE));
 
-  const tweetsWithUserAvatars = tweetsToSend.map(getTweetWithUserAvatar);
+  const tweetsWithUserAvatars = tweetsToSend
+    .reverse()
+    .map(getTweetWithUserAvatar);
 
   res.send(tweetsWithUserAvatars);
 });
